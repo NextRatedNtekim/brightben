@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Factory, X, Lamp, MessageCircle, Sparkles, ArrowUpRight, Heart } from "lucide-react";
 import { FaTwitter, FaGithub, FaLinkedin, FaWhatsapp, FaArrowRight, FaHeart} from "react-icons/fa"
 import { IoSparkles } from "react-icons/io5";
 
@@ -8,10 +7,10 @@ import Background from "../assets/bg-2.jpg"
 
 // Social links 
 const socials = [
-  { icon: FaGithub,        label: "GitHub",    href: "#" },
+  { icon: FaGithub,        label: "GitHub",    href: "https://github.com/NextRatedNtekim" },
   { icon: FaTwitter,       label: "Twitter",   href: "#" },
-  { icon: FaLinkedin,      label: "LinkedIn",  href: "#" },
-  { icon: FaWhatsapp, label: "WhatsApp",  href: "#" },
+  { icon: FaLinkedin,      label: "LinkedIn",  href: "https://www.linkedin.com/in/samuel-ntekim-184a56303?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
+  { icon: FaWhatsapp, label: "WhatsApp",  href: "https://wa.me/qr/EFURGDSMYEJTL1" },
 ];
 
 
@@ -152,3 +151,4 @@ export default function Footer() {
     </footer>
   );
 }
+

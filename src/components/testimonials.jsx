@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Star, Sparkles, Quote } from "lucide-react";
+
 import { motion, useInView, useScroll, useTransform, useSpring } from "framer-motion";
 import Background from "../assets/bg-1.jpg";
 

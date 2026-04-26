@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
-import { ArrowDown, Sparkles, Code2, XCircleIcon, VanIcon, Globe } from "lucide-react";
 import { FaReact, FaFigma, FaGithub, FaPython, FaNodeJs, FaArrowDown } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
 import { DiJavascript } from "react-icons/di";
