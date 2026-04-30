@@ -84,8 +84,8 @@ const projects = [
     description: "End-to-end food ordering experience with live tracking and smooth cart interactions.",
     image: food,
     tags: ["JavaScript", "CSS", "HTML"],
-    links: "#",
-    github: "#",
+    links: "https://restaurant-demo-nine-opal.vercel.app",
+    github: "https://github.com/NextRatedNtekim/restaurant-demo",
     accent: "#fdba74",
     status: {
     text: "Live",
