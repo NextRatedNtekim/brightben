@@ -1,9 +1,6 @@
 import Footer from "../components/footer";
-import { Link as ScrollLink } from "react-scroll";
-import { Link, Outlet, useNavigate} from "react-router-dom";
-import { CiMenuFries } from "react-icons/ci";
-import { IoCloseOutline } from "react-icons/io5";
-import { useState, useEffect, useRef } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   motion,
   AnimatePresence,
@@ -15,15 +12,6 @@ import {
 
 // ── Animation variants 
 
-const navbarVariants = {
-  hidden: { y: -80, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 const logoVariants = {
   hidden: { opacity: 0, x: -16 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.3, ease: "easeOut" } },
@@ -31,7 +19,7 @@ const logoVariants = {
 
 const linkContainerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.4 } },
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.45 } },
 };
 
 const linkVariants = {
@@ -44,47 +32,51 @@ const ctaVariants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.55, ease: "easeOut" } },
 };
 
-// Mobile menu
 const mobileMenuVariants = {
   hidden: { clipPath: "inset(0 0 100% 0)", opacity: 0 },
   visible: {
     clipPath: "inset(0 0 0% 0)",
     opacity: 1,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
   },
   exit: {
     clipPath: "inset(0 0 100% 0)",
     opacity: 0,
-    transition: { duration: 0.35, ease: [0.7, 0, 0.84, 0] },
+    transition: { duration: 0.38, ease: [0.7, 0, 0.84, 0] },
   },
 };
 
 const mobileLinkVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 28 },
   visible: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.15 + i * 0.07, duration: 0.45, ease: "easeOut" },
+    transition: { delay: 0.12 + i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   }),
-  exit: { opacity: 0, y: -12, transition: { duration: 0.2 } },
+  exit: { opacity: 0, y: -10, transition: { duration: 0.18 } },
 };
 
-// ── Nav links data
+// ── Nav links data 
 
 const NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/projects", label: "Projects" },
   { to: "/contact", label: "Contact" },
+  { to: "/about", label: "About" },
 ];
 
-// ── NavLink with animated underline
+// ── Desktop NavLink with animated underline 
 
 function NavLink({ to, children, onClick }) {
   return (
-    <Link to={to} onClick={onClick} className="relative group text-sm tracking-widest uppercase">
+    <Link
+      to={to}
+      onClick={onClick}
+      className="relative group text-[11px] tracking-[0.22em] uppercase text-white/60 hover:text-white transition-colors duration-300"
+    >
       {children}
       <motion.span
-        className="absolute -bottom-0.5 left-0 h-px bg-white origin-left"
+        className="absolute -bottom-0.5 left-0 h-px bg-gradient-to-r from-white to-white/30 origin-left"
         initial={{ scaleX: 0 }}
         whileHover={{ scaleX: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -98,222 +90,228 @@ function NavLink({ to, children, onClick }) {
 
 function Navbar() {
   const navigate = useNavigate();
-  const [toggleMenu, setToggleMenu] = useState(false);
+
+  // Single source of truth for menu open state
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const { scrollY } = useScroll();
 
-  // Track scroll position for condensed state
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 60);
   });
 
-  // Smooth spring for padding/blur transitions
   const rawProgress = useTransform(scrollY, [0, 120], [0, 1]);
   const progress = useSpring(rawProgress, { stiffness: 80, damping: 20 });
+  const bgOpacity = useTransform(progress, [0, 1], [0.4, 0.92]);
 
-  // Navbar shrinks and gains a more opaque backdrop on scroll
-  const paddingY = useTransform(progress, [0, 1], [20, 10]);
-  const bgOpacity = useTransform(progress, [0, 1], [0.5, 0.92]);
-  const borderOpacity = useTransform(progress, [0, 1], [0, 0.18]);
-  const blurPx = useTransform(progress, [0, 1], [6, 18]);
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+  const closeMenu = () => setMenuOpen(false);
 
-  const handleLinkClick = () => setToggleMenu(false);
-
-  // Lock body scroll when mobile menu open
+  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = toggleMenu ? "hidden" : "";
+    document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [toggleMenu]);
+  }, [menuOpen]);
 
   return (
-    <div className="h-screen relative">
+    <div className="min-h-screen relative text-white bg-black">
 
-      {/* ── Navbar ── */}
+      {/* ── Navbar  */}
       <motion.nav
-        className="fixed top-3 left-4 right-4 z-50 rounded-xl text-white"
-        variants={navbarVariants}
-        initial="hidden"
-        animate="visible"
-        style={{
-          paddingTop: paddingY,
-          paddingBottom: paddingY,
-          backgroundColor: useTransform(
-            bgOpacity,
-            (v) => `rgba(0,0,0,${v})`
-          ),
-          borderColor: useTransform(
-            borderOpacity,
-            (v) => `rgba(255,255,255,${v})`
-          ),
-          borderWidth: "1px",
-          borderStyle: "solid",
-          backdropFilter: useTransform(blurPx, (v) => `blur(${v}px)`),
-          WebkitBackdropFilter: useTransform(blurPx, (v) => `blur(${v}px)`),
-        }}
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed inset-x-0 top-0 z-40 transition-all duration-500 ${
+          scrolled
+            ? "border-b border-white/[0.06] bg-black/85 backdrop-blur-2xl shadow-[0_4px_24px_rgba(0,0,0,0.5)]"
+            : "bg-transparent"
+        }`}
       >
-        <div className="flex justify-between items-center px-5">
+        <div className="flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
 
-          {/* Mobile: hamburger */}
-          <motion.button
-            className="sm:hidden cursor-pointer z-[60] relative w-8 h-8 flex items-center justify-center"
-            onClick={() => setToggleMenu(!toggleMenu)}
-            aria-label="Toggle menu"
-            whileTap={{ scale: 0.88 }}
+          {/* Hamburger — z-60 so it always floats above the mobile overlay */}
+          <button
+            onClick={toggleMenu}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="flex flex-col gap-[5px] sm:hidden p-2 -ml-2 z-[60] relative"
           >
-            <AnimatePresence mode="wait" initial={false}>
-              {toggleMenu ? (
-                <motion.span
-                  key="close"
-                  initial={{ rotate: -45, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 45, opacity: 0 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  <IoCloseOutline size={20}  className="z-50"/>
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="open"
-                  initial={{ rotate: 45, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -45, opacity: 0 }}
-                  transition={{ duration: 0.22 }}
-                >
-                  <CiMenuFries size={20} className="z-50"/>
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </motion.button>
+            <motion.span
+              animate={menuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="block h-px w-5 bg-white"
+            />
+            <motion.span
+              animate={menuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+              transition={{ duration: 0.2 }}
+              className="block h-px w-5 bg-white"
+            />
+            <motion.span
+              animate={menuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="block h-px w-5 bg-white"
+            />
+          </button>
 
           {/* Logo */}
           <motion.div
             variants={logoVariants}
-            className="font-serif italic tracking-[0.2em] text-base select-none"
-            style={{ fontFamily: "'Georgia', serif" }}
+            initial="hidden"
+            animate="visible"
+            className="select-none"
           >
-            <Link to="/">PORFOLIO</Link>
+            <Link
+              to="/"
+              onClick={closeMenu}
+              className="font-serif italic tracking-[0.25em] text-sm text-white/90 hover:text-white transition-colors duration-300"
+              style={{ fontFamily: "'Georgia', serif" }}
+            >
+              PORTFOLIO
+            </Link>
           </motion.div>
 
           {/* Desktop links */}
           <motion.div
-            className="gap-8 hidden sm:flex items-center"
+            className="hidden sm:flex items-center gap-9"
             variants={linkContainerVariants}
+            initial="hidden"
+            animate="visible"
           >
             {NAV_LINKS.map(({ to, label }) => (
-              <motion.div key={to} variants={linkVariants}>
-                <NavLink to={to} onClick={handleLinkClick}>
-                  {label}
-                </NavLink>
+              <motion.div key={label} variants={linkVariants}>
+                <NavLink to={to}>{label}</NavLink>
               </motion.div>
             ))}
           </motion.div>
 
           {/* CTA button */}
-          <motion.div 
-            variants={ctaVariants} 
-            className="cursor-pointer hover:text-gradient" 
-            onClick={() => navigate("/projects")}>
-            
-              <motion.span
-                className="text-[11px] tracking-[0.22em] uppercase border border-white/40 px-4 py-2 rounded-full inline-block"
-                whileHover={{
-                  backgroundColor: "rgba(255,255,255,0.12)",
-                  borderColor: "rgba(255,255,255,0.8)",
-                  color: "#ffe998",
-                  scale: 1.03,
-                }}
-                whileTap={{ scale: 0.96 }}
-                transition={{ duration: 0.2 }}
-              >
-                PROJECTS
-              </motion.span>
-            
+          <motion.div
+            variants={ctaVariants}
+            initial="hidden"
+            animate="visible"
+            className="cursor-pointer"
+            onClick={() => navigate("/projects")}
+          >
+            <motion.span
+              className="text-[10px] tracking-[0.25em] uppercase border border-white/25 px-5 py-2 rounded-full inline-block text-white/60"
+              whileHover={{
+                backgroundColor: "rgba(255,255,255,0.08)",
+                borderColor: "rgba(255,255,255,0.65)",
+                color: "#ffffff",
+                scale: 1.04,
+              }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.22 }}
+            >
+              Projects
+            </motion.span>
           </motion.div>
 
         </div>
+
+        {/* Gradient border bottom — fades in on scroll */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)",
+            opacity: progress,
+          }}
+        />
       </motion.nav>
 
-      {/* ── Mobile Menu ── */}
+      {/* ── Mobile Menu Overlay ───────────────────────────────────────────── */}
+      {/* z-50: sits above page content but below the z-60 hamburger button  */}
       <AnimatePresence>
-        {toggleMenu && (
+        {menuOpen && (
           <motion.div
-            className="sm:hidden fixed inset-0 z-[55] flex flex-col"
+            className="sm:hidden fixed inset-0 z-50 flex flex-col"
             style={{
-              background: "rgba(0,0,0,0.96)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
+              background: "rgba(0,0,0,0.97)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
             }}
             variants={mobileMenuVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
           >
-            {/* Decorative top accent line */}
+            {/* Top accent line */}
             <motion.div
               className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)" }}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
+              style={{
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)",
+              }}
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
             />
 
-            <div className="flex flex-col gap-10 h-full items-center justify-center">
+            {/* Nav links — centred vertically */}
+            <nav className="flex flex-col items-center justify-center gap-1 flex-1">
               {NAV_LINKS.map(({ to, label }, i) => (
                 <motion.div
-                  key={to}
+                  key={label}
                   custom={i}
                   variants={mobileLinkVariants}
                   initial="hidden"
                   animate="visible"
                   exit="exit"
+                  className="overflow-hidden"
                 >
                   <Link
                     to={to}
-                    onClick={handleLinkClick}
-                    className="text-3xl font-serif italic tracking-widest text-white/90 hover:text-white transition-colors"
+                    onClick={closeMenu}
+                    className="group relative flex items-center gap-3 py-4 px-6"
                     style={{ fontFamily: "'Georgia', serif" }}
                   >
-                    {label}
+                    {/* Index number */}
+                    <span className="text-[10px] tracking-widest text-white/20 font-mono tabular-nums">
+                      0{i + 1}
+                    </span>
+
+                    {/* Label */}
+                    <span className="text-3xl font-serif italic text-white/80 group-hover:text-white transition-colors duration-300 tracking-wide">
+                      {label}
+                    </span>
+
+                    {/* Hover arrow */}
+                    <motion.span
+                      className="text-white/25 text-lg ml-1 group-hover:text-white/60 transition-colors duration-300"
+                      initial={{ x: -4, opacity: 0 }}
+                      whileHover={{ x: 0, opacity: 1 }}
+                    >
+                      →
+                    </motion.span>
                   </Link>
+
+                  {/* Separator */}
+                  {i < NAV_LINKS.length - 1 && (
+                    <div className="w-px h-px mx-auto bg-white/8" />
+                  )}
                 </motion.div>
               ))}
 
-              {/* Mobile CTA */}
-              <motion.div
-                custom={NAV_LINKS.length}
-                variants={mobileLinkVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                className="mt-6"
-              >
-                <a href="#experience" onClick={handleLinkClick}>
-                  <span className="text-xs tracking-[0.3em] uppercase border border-white/30 px-8 py-3 rounded-full text-white/70">
-                  Experience
-                  </span>
-                </a>
-              </motion.div>
-            </div>
+              
+            </nav>
 
             {/* Bottom label */}
             <motion.p
-              className="absolute bottom-10 text-white/20 text-[10px] tracking-[0.4em] uppercase self-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              className="pb-10 text-white/15 text-[9px] tracking-[0.45em] uppercase text-center"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55, duration: 0.5 }}
             >
-              2025 · Samuel Ntekim
+              2026 · Samuel Ntekim
             </motion.p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Page content ── */}
+      {/* ── Page content  */}
       <div className="flex-grow">
         <Outlet />
-        
       </div>
+
       <Footer />
     </div>
   );

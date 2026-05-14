@@ -1,9 +1,8 @@
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from "react-router-dom";
 import Root from "../src/components/navbar"; 
 import HomePage from "./pages/home";
-import About from "./components/about"
+import About from "./pages/about"
 import Contact from "./pages/contact";
-import Experience from "./components/experience";
 import Projects from "./pages/projects";
 
 export default function App() {
@@ -13,7 +12,6 @@ export default function App() {
         <Route index element={<HomePage />} /> 
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/experience" element={<Experience />} />
         <Route path="/projects" element={<Projects />} />
       </Route>
     )
@@ -21,5 +19,4 @@ export default function App() {
 
   return <RouterProvider router={router} />;
 }
-
 
