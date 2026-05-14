@@ -14,30 +14,6 @@ import {
 } from "framer-motion";
 
 const services = [
-  // {
-  //   icon: "✦",
-  //   title: "Content Creation",
-  //   desc: "Authentic content crafted to convert audiences into loyal customers.",
-  //   gradient: "from-sky-500/20 to-cyan-400/5",
-  // },
-  // {
-  //   icon: "◈",
-  //   title: "Brand Strategy",
-  //   desc: "Strategic storytelling that aligns your brand with your audience.",
-  //   gradient: "from-blue-500/20 to-sky-400/5",
-  // },
-  // {
-  //   icon: "⬡",
-  //   title: "Social Media",
-  //   desc: "Aesthetic content calendars that keep your brand top-of-mind.",
-  //   gradient: "from-cyan-500/20 to-blue-400/5",
-  // },
-  // {
-  //   icon: "◇",
-  //   title: "Video Production",
-  //   desc: "Cinematic short-form videos designed for virality.",
-  //   gradient: "from-sky-400/20 to-indigo-400/5",
-  // },
   {
       icon: IoNewspaperOutline,
       title: "Writing & Content",

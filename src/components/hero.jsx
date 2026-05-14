@@ -30,7 +30,7 @@ const PARTICLES = Array.from({ length: 14 }, (_, i) => ({
 // ScrollZoom Intro
 function ScrollZoomIntro() {
   const containerRef = useRef(null);
-
+  const navigate = useNavigate();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -220,7 +220,7 @@ function SkillsMarquee() {
 
 // Hero (main content panel) 
 function HeroContent() {
-  const navigate = useNavigate();
+  
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
 

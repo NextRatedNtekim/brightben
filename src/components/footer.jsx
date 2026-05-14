@@ -6,7 +6,7 @@ function Footer() {
           <span className="text-sky-400">B</span>rigth
         </h3>
         <p className="text-xs text-white/25 uppercase tracking-widest">
-          © 2026 Bright. All rights reserved.
+          © 2026 Brigtht. All rights reserved.
         </p>
         <div className="flex gap-6">
           {["Twitter", "Discord", "LinkedIn"].map((item) => (
