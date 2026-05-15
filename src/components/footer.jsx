@@ -3,10 +3,10 @@ function Footer() {
     <footer className="border-t border-white/[0.07] bg-black px-6 py-10">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center md:flex-row">
         <h3 className="text-xl font-black tracking-widest text-white">
-          <span className="text-sky-400">B</span>rigth
+          <span className="text-sky-400">B</span>right
         </h3>
         <p className="text-xs text-white/25 uppercase tracking-widest">
-          © 2026 Brigtht. All rights reserved.
+          © 2026 Bright. All rights reserved.
         </p>
         <div className="flex gap-6">
           {["Twitter", "Discord", "LinkedIn"].map((item) => (
