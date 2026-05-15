@@ -36,6 +36,7 @@ function ScrollZoomIntro() {
     offset: ["start start", "end start"],
   });
 
+  
   // Image zooms IN as you scroll
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
   const springScale = useSpring(scale, { stiffness: 80, damping: 30 });
@@ -79,7 +80,7 @@ const item = {
         >
           <img
             src={Background}
-            alt="Brigth Ben"
+            alt="Bright Ben"
             className="w-full h-full object-cover"
           />
         </motion.div>
@@ -123,7 +124,7 @@ const item = {
             className="text-[clamp(2.8rem,8vw,7rem)] font-black leading-[1.05] tracking-tight text-white"
             style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
-            {["Meet,", "Brigth", "Ben"].map((word, i) => (
+            {["Meet,", "Bright", "Ben"].map((word, i) => (
               <motion.span key={i} variants={wordVariant} className="inline-block mr-[0.25em]">
                 {i === 1 ? (
                   <span className="italic" style={{ color: "#95cbfa" }}>{word}</span>
