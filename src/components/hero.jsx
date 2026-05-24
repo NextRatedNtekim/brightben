@@ -140,7 +140,7 @@ const item = {
             transition={{ duration: 0.9, delay: 0.9 }}
             className="mt-6 text-[clamp(0.9rem,2vw,1.15rem)] text-gray-300 max-w-lg leading-relaxed"
           >
-            Growing communities through content, moderation and enagement
+            Growing communities through content, moderation and engagement
           </motion.p>
         <motion.div variants={item} className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
           <CosButton content="View Projects" primary onClick={() => navigate("/projects")} />

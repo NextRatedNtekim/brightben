@@ -7,27 +7,31 @@ import { motion, useInView } from "framer-motion";
 
 const portfolio = [
   {
-    id: 1,
-    title: "Loyal",
-    tag: "Project",
-    accent: "from-amber-500/20 via-amber-900/10 to-sky-900/60",
-    glowColor: "rgba(245,158,11,0.15)",
-    borderColor: "rgba(245,158,11,0.2)",
-    tagColor: "text-amber-400",
-    image: p1,
-    details: `Collaborated with the Loyal team to support community growth and ecosystem visibility through structured engagement, educational content, and audience interaction strategies.`,
-  },
-  {
     id: 2,
-    title: "Gaia",
+    title: "Loyal",
     tag: "Community",
+    date: " January 2026-April 2026",
     accent: "from-rose-500/20 via-rose-900/10 to-sky-900/60",
     glowColor: "rgba(244,63,94,0.15)",
     borderColor: "rgba(244,63,94,0.2)",
     tagColor: "text-rose-400",
     image: p2,
     details: `Served as a Regional Moderator within the Gaia ecosystem, supporting community engagement, moderation activities, and ecosystem participation across regional channels.`,
+    more: "/loyal"
   },
+  {
+    id: 1,
+    title: "Gaia",
+    tag: "Project",
+    date: " April 2025-November 2025",
+    accent: "from-amber-500/20 via-amber-900/10 to-sky-900/60",
+    glowColor: "rgba(245,158,11,0.15)",
+    borderColor: "rgba(245,158,11,0.2)",
+    tagColor: "text-amber-400",
+    image: p1,
+    details: `Collaborated with the Loyal team to support community growth and ecosystem visibility through structured engagement, educational content, and audience interaction strategies.`,
+    more: "/gaia"
+  }
 ];
 
 function FadeUp({ children, delay = 0, className = "" }) {
@@ -139,7 +143,9 @@ function ProjectCard({ item, index, navigate }) {
               0{item.id}
             </span>
           </div>
-
+          <div className={`text-xs ${item.tagColor} mb-2 pb-2 border-b border-white/[0.06]`}>
+            {item.date}
+          </div>
           <p className="text-sm text-white/55 leading-relaxed line-clamp-3 flex-1">
             {item.details.trim()}
           </p>
@@ -149,7 +155,7 @@ function ProjectCard({ item, index, navigate }) {
 
           {/* CTA */}
           <motion.div
-            onClick={() => navigate("/projects")}
+            onClick={() => navigate(item.more)}
             whileHover={{ x: 3 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 320, damping: 20 }}
