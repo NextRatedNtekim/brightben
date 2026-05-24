@@ -1,63 +1,35 @@
 import { useEffect, useState, useRef } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-  useInView,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
-
+import tes1 from "../assets/tes-1.jpeg";
+import tes2 from "../assets/tes-2.jpeg";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 
 const testimonials = [
   {
     name: "Amara Osei",
     role: "Brand Manager",
-    text: "Our engagement tripled within weeks of working together.",
     initial: "A",
+    img: tes1,
+    // text: "Working with this team completely transformed how we show up online. The content strategy was sharp, intentional, and delivered results we hadn't seen before.",
   },
   {
     name: "Zara Kimani",
     role: "Founder",
-    text: "One of the most creative creators I've worked with.",
     initial: "Z",
-  },
-  {
-    name: "Temi Adeyemi",
-    role: "CEO",
-    text: "Professional, fast, and incredibly talented.",
-    initial: "T",
+    img: tes2,
+    // text: "From community building to ecosystem visibility, every deliverable exceeded expectations. A true partner in growth — highly recommend.",
   },
 ];
-
-/* ── Fade-up reveal wrapper ── */
-function FadeUp({ children, delay = 0, className = "" }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 48 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1], delay }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 function SectionTitle({ small, title }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <div ref={ref} className="mb-14 text-center">
+    <div ref={ref} className="mb-16 text-center">
       <motion.p
-        initial={{ opacity: 0, letterSpacing: "0.1em" }}
-        animate={inView ? { opacity: 1, letterSpacing: "0.3em" } : {}}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-        className="mb-3 text-xs uppercase tracking-[0.3em] text-sky-400 font-medium"
+        initial={{ opacity: 0, y: 10 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6 }}
+        className="mb-3 text-[10px] uppercase tracking-[0.4em] text-sky-400/80 font-semibold"
       >
         {small}
       </motion.p>
@@ -65,112 +37,109 @@ function SectionTitle({ small, title }) {
         initial={{ opacity: 0, y: 24 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-        className="text-4xl font-black text-white md:text-5xl tracking-tight"
+        className="text-5xl font-black text-white md:text-6xl tracking-tight"
       >
         {title}
       </motion.h2>
       <motion.div
-        initial={{ scaleX: 0 }}
-        animate={inView ? { scaleX: 1 } : {}}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-        className="mx-auto mt-5 h-px w-16 origin-left bg-gradient-to-r from-sky-400 to-transparent"
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
+        className="mx-auto mt-6 h-px w-24 origin-center bg-gradient-to-r from-transparent via-sky-400/60 to-transparent"
       />
     </div>
   );
 }
 
-/* ── Magnetic cursor glow ── */
-function MagneticGlow({ children, className = "" }) {
-  const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 200, damping: 20 });
-  const springY = useSpring(y, { stiffness: 200, damping: 20 });
-
-  const handleMouseMove = (e) => {
-    const rect = ref.current.getBoundingClientRect();
-    x.set(e.clientX - rect.left - rect.width / 2);
-    y.set(e.clientY - rect.top - rect.height / 2);
-  };
-  const handleMouseLeave = () => { x.set(0); y.set(0); };
-
-  return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ x: springX, y: springY }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-
 function Testimonials() {
   const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
 
+  // Auto-advance only when not paused
   useEffect(() => {
+    if (paused) return;
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [paused]);
+
+  const goTo = (index) => {
+    setCurrent(index);
+    setPaused(true);
+    // Resume auto-play after 8s of manual interaction
+    setTimeout(() => setPaused(false), 8000);
+  };
+
+  const prev = () => goTo((current - 1 + testimonials.length) % testimonials.length);
+  const next = () => goTo((current + 1) % testimonials.length);
+
+  const t = testimonials[current];
 
   return (
-    <section className="relative bg-black px-6 py-28">
-      <div className="mx-auto max-w-4xl text-center" ref={ref}>
+    <section className="relative bg-[#030303] px-6 py-32 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-sky-900/10 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+      <div className="mx-auto max-w-5xl" ref={ref}>
         <SectionTitle small="Testimonials" title="Client Love" />
 
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
-            initial={{ opacity: 0, y: 40, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -40, scale: 0.97 }}
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -32 }}
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="relative rounded-3xl border border-white/[0.07] bg-white/[0.02] p-10 md:p-14 overflow-hidden"
+            className="relative rounded-3xl border border-white/[0.08] bg-[#080808] overflow-hidden backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.45)]"
           >
-            {/* BG glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(14,165,233,0.05),transparent_60%)]" />
+            {/* Inner glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(14,165,233,0.06),transparent_60%)] pointer-events-none" />
 
-            {/* Quote mark */}
-            <div className="absolute top-6 left-8 text-7xl font-black text-sky-400/10 leading-none select-none">&ldquo;</div>
+            <div className="flex flex-col md:flex-row">
+              {/* ── Image Panel ── */}
+              <div className="relative w-full h-[300px] md:h-[450px] bg-[#0a0a0a] overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={`img-${current}`}
+                    src={t.img}
+                    alt={t.name}
+                    initial={{
+                      opacity: 0,
+                      scale: 0.96,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 1.04,
+                    }}
+                    transition={{
+                      duration: 0.7,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="absolute inset-0 w-full h-full object-contain p-4"
+                  />
+                </AnimatePresence>
 
-            <p className="relative mb-8 text-lg leading-relaxed text-white/65 md:text-xl font-light italic">
-              "{testimonials[current].text}"
-            </p>
-
-            <div className="relative flex items-center justify-center gap-4">
-              <div className="h-10 w-10 rounded-full bg-sky-500 flex items-center justify-center text-white font-bold text-sm">
-                {testimonials[current].initial}
+                {/* subtle vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
               </div>
-              <div className="text-left">
-                <h4 className="font-bold text-white text-sm">{testimonials[current].name}</h4>
-                <p className="text-xs text-white/35 uppercase tracking-widest">{testimonials[current].role}</p>
-              </div>
+
+              {/* ── Content Panel ── */}
+              
+              
             </div>
           </motion.div>
         </AnimatePresence>
-
-        <div className="mt-8 flex justify-center gap-3">
-          {testimonials.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrent(index)}
-              className={`rounded-full transition-all duration-400 ${
-                current === index
-                  ? "w-8 h-2 bg-sky-400 shadow-[0_0_10px_rgba(14,165,233,0.6)]"
-                  : "w-2 h-2 bg-white/15 hover:bg-white/30"
-              }`}
-            />
-          ))}
-        </div>
       </div>
     </section>
   );
 }
+
 export default Testimonials;

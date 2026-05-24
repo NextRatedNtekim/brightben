@@ -1,3 +1,10 @@
+const socialLinks = [
+  { name: "Twitter", url: "https://x.com/brightben0" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/bright-ben-8085112a1?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
+  { name: "Telegram", url: "https://t.me/brightben0" },
+];
+
+
 function Footer() {
   return (
     <footer className="border-t border-white/[0.07] bg-black px-6 py-10">
@@ -9,13 +16,13 @@ function Footer() {
           © 2026 Bright. All rights reserved.
         </p>
         <div className="flex gap-6">
-          {["Twitter", "Discord", "LinkedIn"].map((item) => (
+          {socialLinks.map((item, i) => (
             <a
-              key={item}
-              href="#"
+              key={i}
+              href={item.url}
               className="text-xs text-white/35 uppercase tracking-widest transition hover:text-sky-400"
             >
-              {item}
+              {item.name}
             </a>
           ))}
         </div>
