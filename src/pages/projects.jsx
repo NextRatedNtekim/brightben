@@ -7,7 +7,7 @@ import { motion, useInView } from "framer-motion";
 
 const portfolio = [
   {
-    id: 2,
+    id: 1,
     title: "Loyal",
     tag: "Community",
     date: " January 2026-April 2026",
@@ -16,11 +16,11 @@ const portfolio = [
     borderColor: "rgba(244,63,94,0.2)",
     tagColor: "text-rose-400",
     image: p2,
-    details: `Served as a Regional Moderator within the Gaia ecosystem, supporting community engagement, moderation activities, and ecosystem participation across regional channels.`,
+    details: `Served as a Regional Moderator within the Loyal ecosystem, supporting community engagement, moderation activities, and ecosystem participation across regional channels.`,
     more: "/loyal"
   },
   {
-    id: 1,
+    id: 2,
     title: "Gaia",
     tag: "Project",
     date: " April 2025-November 2025",
@@ -29,7 +29,7 @@ const portfolio = [
     borderColor: "rgba(245,158,11,0.2)",
     tagColor: "text-amber-400",
     image: p1,
-    details: `Collaborated with the Loyal team to support community growth and ecosystem visibility through structured engagement, educational content, and audience interaction strategies.`,
+    details: `Collaborated with the Gaia team to support community growth and ecosystem visibility through structured engagement, educational content, and audience interaction strategies.`,
     more: "/gaia"
   }
 ];
